@@ -15,7 +15,7 @@ public interface StatsRepository extends JpaRepository<HitModel, Long> {
 
     @Query(value = "SELECT new ru.practicum.ewm.stats_server.model.StatsModel(" +
             "stats.app, stats.uri, COUNT(stats.ip) AS hits) " +
-            "FROM EndpointHit stats " +
+            "FROM HitModel stats " +
             "WHERE stats.timestamp BETWEEN :start AND :end " +
             "GROUP BY stats.app, stats.uri " +
             "ORDER BY hits DESC")
@@ -24,7 +24,7 @@ public interface StatsRepository extends JpaRepository<HitModel, Long> {
 
     @Query(value = "SELECT new ru.practicum.ewm.stats_server.model.StatsModel(" +
             "stats.app, stats.uri, COUNT(DISTINCT stats.ip) AS hits) " +
-            "FROM EndpointHit stats " +
+            "FROM HitModel stats " +
             "WHERE stats.timestamp BETWEEN :start AND :end " +
             "GROUP BY stats.app, stats.uri " +
             "ORDER BY hits DESC")
@@ -33,7 +33,7 @@ public interface StatsRepository extends JpaRepository<HitModel, Long> {
 
     @Query(value = "SELECT new ru.practicum.ewm.stats_server.model.StatsModel(" +
             "stats.app, stats.uri, COUNT(stats.ip) AS hits) " +
-            "FROM EndpointHit stats " +
+            "FROM HitModel stats " +
             "WHERE stats.timestamp BETWEEN :start AND :end " +
             "AND uri IN ( :uris ) " +
             "GROUP BY stats.app, stats.uri " +
@@ -44,7 +44,7 @@ public interface StatsRepository extends JpaRepository<HitModel, Long> {
 
     @Query(value = "SELECT new ru.practicum.ewm.stats_server.model.StatsModel(" +
             "stats.app, stats.uri, COUNT(DISTINCT stats.ip) AS hits) " +
-            "FROM EndpointHit stats " +
+            "FROM HitModel stats " +
             "WHERE stats.timestamp BETWEEN :start AND :end " +
             "AND uri IN ( :uris ) " +
             "GROUP BY stats.app, stats.uri " +

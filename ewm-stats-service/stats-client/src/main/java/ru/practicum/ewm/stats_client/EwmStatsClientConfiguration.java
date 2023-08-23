@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-public class EwmStatsClientConfig {
+public class EwmStatsClientConfiguration {
 
     @Bean
     public RestTemplate rest() {

@@ -5,12 +5,12 @@ import lombok.*;
 @Getter
 @Builder
 @EqualsAndHashCode
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor(force = true)
 public class ViewStatDto {
 
-    private String app;
-    private String uri;
-    private long hits;
+    private final String app;
+    private final String uri;
+    private final long hits;
 
 }

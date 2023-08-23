@@ -17,16 +17,16 @@ import java.time.LocalDateTime;
 public class EndpointHitDto {
 
     @NotBlank
-    private String app;
+    private final String app;
 
     @NotBlank
-    private String uri;
+    private final String uri;
 
     @NotBlank
-    private String ip;
+    private final String ip;
 
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime timestamp;
+    private final LocalDateTime timestamp;
 
 }

@@ -91,7 +91,7 @@
                 <plugin>
                     <groupId>com.mysema.maven</groupId>
                     <artifactId>apt-maven-plugin</artifactId>
-                    <version>${apt.maven.plugin.version}</version>
+                    <version>4.0.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

@@ -1,7 +1,6 @@
 package ru.practicum.ewm.main_service.compilation.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import ru.practicum.ewm.main_service.compilation.dto.CompilationDto;
 import ru.practicum.ewm.main_service.compilation.dto.NewCompilationDto;
 import ru.practicum.ewm.main_service.compilation.model.Compilation;

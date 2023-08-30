@@ -29,7 +29,7 @@ public interface StatsRepository extends JpaRepository<HitModel, Long> {
             "GROUP BY stats.app, stats.uri " +
             "ORDER BY hits DESC")
     List<StatsModel> findStatsBetweenStartAndEndAndUniqueIp(@Param("start") LocalDateTime start,
-                                                          @Param("end") LocalDateTime end);
+                                                            @Param("end") LocalDateTime end);
 
     @Query(value = "SELECT new ru.practicum.ewm.stats_server.model.StatsModel(" +
             "stats.app, stats.uri, COUNT(stats.ip) AS hits) " +
@@ -39,8 +39,8 @@ public interface StatsRepository extends JpaRepository<HitModel, Long> {
             "GROUP BY stats.app, stats.uri " +
             "ORDER BY hits DESC")
     List<StatsModel> findStatsBetweenStartAndEndByUri(@Param("start") LocalDateTime start,
-                                                    @Param("end") LocalDateTime end,
-                                                    @Param("uris") List<String> uris);
+                                                      @Param("end") LocalDateTime end,
+                                                      @Param("uris") List<String> uris);
 
     @Query(value = "SELECT new ru.practicum.ewm.stats_server.model.StatsModel(" +
             "stats.app, stats.uri, COUNT(DISTINCT stats.ip) AS hits) " +
@@ -50,7 +50,7 @@ public interface StatsRepository extends JpaRepository<HitModel, Long> {
             "GROUP BY stats.app, stats.uri " +
             "ORDER BY hits DESC")
     List<StatsModel> findStatsBetweenStartAndEndByUriAndUniqueIp(@Param("start") LocalDateTime start,
-                                                               @Param("end") LocalDateTime end,
-                                                               @Param("uris") List<String> uris);
+                                                                 @Param("end") LocalDateTime end,
+                                                                 @Param("uris") List<String> uris);
 
 }

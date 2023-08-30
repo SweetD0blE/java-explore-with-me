@@ -1,16 +1,16 @@
 package ru.practicum.ewm.common_dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @Builder
-@EqualsAndHashCode
 @AllArgsConstructor
-@NoArgsConstructor(force = true)
+@NoArgsConstructor
 public class ViewStatDto {
-
-    private final String app;
-    private final String uri;
-    private final long hits;
-
+    private String app;
+    private String uri;
+    private Long hits;
 }

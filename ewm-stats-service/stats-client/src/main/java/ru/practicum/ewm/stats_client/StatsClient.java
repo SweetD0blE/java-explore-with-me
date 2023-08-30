@@ -1,82 +1,78 @@
 package ru.practicum.ewm.stats_client;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
+import ru.practicum.ewm.common_dto.Common;
 import ru.practicum.ewm.common_dto.EndpointHitDto;
-import ru.practicum.ewm.common_dto.ViewStatDto;
 
-import javax.validation.constraints.NotNull;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
-
-@Slf4j
 @Service
-@Validated
-public class StatsClient {
+@Slf4j
+public class StatsClient extends BaseClient {
+    @Autowired
+    public StatsClient(@Value("${stats-server.url}") String serverUrl, RestTemplateBuilder builder) {
+        super(builder
+                .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
+                .build()
+        );
+    }
 
-    private static final String STATS_SERVER_URL = "http://stats-server:9090";
-    private static final String PATH_HIT = "/hit";
-    private static final String PATH_STATS = "/stats";
+    public ResponseEntity<Object> addHit(String name, String uri, String ip, LocalDateTime timestamp) {
+        log.info("Запрос на регистрацию обращения к name = {}, uri = {}, ip = {}, timestamp = {}",
+                name, uri, ip, timestamp);
 
-    private static final String PATH_DATE = "?start={start}&end={end}";
-
-    private static final String PATH_URIS = "&uris={uris}";
-
-    private static final String PATH_UNIQUE_IP = "&unique={unique}";
-
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-    private final RestTemplate rest;
-
-    public StatsClient() {
-        rest = new RestTemplateBuilder()
-                .uriTemplateHandler(new DefaultUriBuilderFactory(STATS_SERVER_URL))
-                .requestFactory(HttpComponentsClientHttpRequestFactory::new)
+        EndpointHitDto endpointHit = EndpointHitDto.builder()
+                .app(name)
+                .uri(uri)
+                .ip(ip)
+                .timestamp(LocalDateTime.parse(timestamp.format(Common.DT_FORMATTER)))
                 .build();
+        return post(Common.HIT_ENDPOINT, endpointHit);
     }
 
-    public void addHit(EndpointHitDto endpointHitDto) {
-        rest.postForObject(STATS_SERVER_URL + PATH_HIT, endpointHitDto, EndpointHitDto.class);
-        log.info("StatsClient: create POST request in StatsServer");
+    public ResponseEntity<Object> getStats(LocalDateTime start, LocalDateTime end, List<String> uris) {
+        return getStats(start, end, uris, null);
     }
 
-    public List<ViewStatDto> getStats(@NotNull LocalDateTime start, @NotNull LocalDateTime end,
-                                      List<String> uris, Boolean unique) {
-        StringBuilder requestUri = new StringBuilder(STATS_SERVER_URL + PATH_STATS + PATH_DATE);
-        String startDate = dateEncoder(start);
-        String endDate = dateEncoder(end);
+    public ResponseEntity<Object> getStats(LocalDateTime start, LocalDateTime end) {
+        return getStats(start, end, null, null);
+    }
 
-        Map<String, Object> param = new HashMap<>();
-        param.put("start", startDate);
-        param.put("end", endDate);
+    public ResponseEntity<Object> getStats(LocalDateTime start, LocalDateTime end, Boolean unique) {
+        return getStats(start, end, null, unique);
+    }
 
-        if (uris != null) {
-            param.put("uris", String.join(",", uris));
-            requestUri.append(PATH_URIS);
+    public ResponseEntity<Object> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
+        log.info("Запрос на получение статистики по параметрам start = {}, end = {}, uris = {}, unique = {}",
+                start, end, uris, unique);
+
+        if (start == null || end == null || start.isAfter(end)) {
+            throw new IllegalArgumentException("Недопустимый интервал дат.");
         }
 
+        StringBuilder uriBuilder = new StringBuilder(Common.STATS_ENDPOINT + "?start={start}&end={end}");
+        Map<String, Object> parameters = Map.of(
+                "start", start.format(Common.DT_FORMATTER),
+                "end", end.format(Common.DT_FORMATTER)
+        );
+
+        if (uris != null && !uris.isEmpty()) {
+            for (String uri : uris) {
+                uriBuilder.append("&uris=").append(uri);
+            }
+        }
         if (unique != null) {
-            param.put("unique", unique);
-            requestUri.append(PATH_UNIQUE_IP);
+            uriBuilder.append("&unique=").append(unique);
         }
 
-        ResponseEntity<ViewStatDto[]> entity = rest.getForEntity(requestUri.toString(), ViewStatDto[].class, param);
-        log.info("StatsClient: create GET request in StatsServer");
-        return entity.getBody() != null ? Arrays.asList(entity.getBody()) : Collections.emptyList();
+        return get(uriBuilder.toString(), parameters);
     }
-
-    public String dateEncoder(LocalDateTime date) {
-        return URLEncoder.encode(date.format(FORMATTER), StandardCharsets.UTF_8);
-    }
-
 }

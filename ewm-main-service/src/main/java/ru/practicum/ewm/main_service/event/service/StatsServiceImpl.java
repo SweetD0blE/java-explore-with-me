@@ -4,15 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.ewm.common_dto.EndpointHitDto;
 import ru.practicum.ewm.common_dto.ViewStatDto;
+import ru.practicum.ewm.main_service.MainCommon;
 import ru.practicum.ewm.main_service.event.model.Event;
 import ru.practicum.ewm.main_service.event.repository.RequestRepository;
 import ru.practicum.ewm.stats_client.StatsClient;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,7 +26,6 @@ import java.util.stream.Collectors;
 public class StatsServiceImpl implements StatsService {
     private final StatsClient statsClient;
     private final RequestRepository requestRepository;
-    private final EndpointHitDto endpointHitDto;
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Value(value = "${app.name}")
@@ -33,7 +34,9 @@ public class StatsServiceImpl implements StatsService {
     @Override
     public void addHit(HttpServletRequest request) {
         log.info("Отправлен запрос на регистрацию обращения к серверу статистики с параметрами request = {}", request);
-        statsClient.addHit(endpointHitDto);
+
+        statsClient.addHit(appName, request.getRequestURI(), request.getRemoteAddr(),
+                LocalDateTime.parse(LocalDateTime.now().format(MainCommon.DT_FORMATTER), MainCommon.DT_FORMATTER));
     }
 
     @Override
@@ -41,10 +44,13 @@ public class StatsServiceImpl implements StatsService {
         log.info("Отправлен запрос на получение статистики к серверу статистики с параметрами " +
                 "start = {}, end = {}, uris = {}, unique = {}", start, end, uris, unique);
 
+        ResponseEntity<Object> response = statsClient.getStats(start, end, uris, unique);
 
-        List<ViewStatDto> response = statsClient.getStats(start, end, uris, unique);
-
-        return response;
+        try {
+            return Arrays.asList(mapper.readValue(mapper.writeValueAsString(response.getBody()), ViewStatDto[].class));
+        } catch (IOException exception) {
+            throw new ClassCastException(exception.getMessage());
+        }
     }
 
     @Override

@@ -1,5 +1,6 @@
 package ru.practicum.ewm.main_service.event.service;
 
+
 import ru.practicum.ewm.common_dto.ViewStatDto;
 import ru.practicum.ewm.main_service.event.model.Event;
 

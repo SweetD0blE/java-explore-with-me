@@ -1,6 +1,5 @@
 package ru.practicum.ewm.main_service.category.mapper;
 
-import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 import ru.practicum.ewm.main_service.category.dto.CategoryDto;
 import ru.practicum.ewm.main_service.category.dto.NewCategoryDto;

@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class EventCustomRepositoryImpl implements EventCustomRepository {
+
     @PersistenceContext
     private EntityManager entityManager;
 

@@ -18,7 +18,7 @@ import java.util.Map;
 @Slf4j
 public class StatsClient extends BaseClient {
     @Autowired
-    public StatsClient(@Value("${stats-server.url}") String serverUrl, RestTemplateBuilder builder) {
+    public StatsClient(@Value("${app.stats-server.url:http://localhost:9090}") String serverUrl, RestTemplateBuilder builder) {
         super(builder
                 .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
                 .build()

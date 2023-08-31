@@ -7,8 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.common_dto.EndpointHitDto;
 import ru.practicum.ewm.common_dto.ViewStatDto;
 import ru.practicum.ewm.stats_server.mapper.HitModelMapper;
-import ru.practicum.ewm.stats_server.mapper.StatsModelMapper;
-import ru.practicum.ewm.stats_server.model.StatsModel;
 import ru.practicum.ewm.stats_server.repository.StatsRepository;
 
 import java.net.URLDecoder;
@@ -16,7 +14,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -30,7 +27,7 @@ public class StatsServiceImpl implements StatsService {
     @Override
     @Transactional(readOnly = true)
     public List<ViewStatDto> findStatistic(String start, String end, List<String> uris, Boolean unique) {
-        List<StatsModel> statList;
+        List<ViewStatDto> statList;
         LocalDateTime startDate = dateDecoder(start);
         LocalDateTime endDate = dateDecoder(end);
         if (uris == null) {
@@ -47,7 +44,7 @@ public class StatsServiceImpl implements StatsService {
             }
         }
         log.info("StatsServer: data received and sent");
-        return statList.stream().map(StatsModelMapper::toViewStatDto).collect(Collectors.toList());
+        return statList;
     }
 
     @Override

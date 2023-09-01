@@ -15,7 +15,6 @@ public class HitModelMapper {
                 .app(endpointHitDto.getApp())
                 .uri(endpointHitDto.getUri())
                 .ip(endpointHitDto.getIp())
-                .timestamp(endpointHitDto.getTimestamp())
                 .build();
     }
 

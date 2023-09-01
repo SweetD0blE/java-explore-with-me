@@ -6,34 +6,45 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.main_service.compilation.dto.CompilationDto;
 import ru.practicum.ewm.main_service.compilation.dto.NewCompilationDto;
-import ru.practicum.ewm.main_service.compilation.dto.UpdateCompilationRequest;
-import ru.practicum.ewm.main_service.compilation.service.CompilationService;
+import ru.practicum.ewm.main_service.compilation.mapper.CompilationMapper;
+import ru.practicum.ewm.main_service.compilation.model.Compilation;
+import ru.practicum.ewm.main_service.compilation.service.CompilationServiceImpl;
+import ru.practicum.ewm.main_service.exception.ValidationException;
 
 import javax.validation.Valid;
 
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin/compilations")
-@Validated
 public class CompilationAdminController {
-    private final CompilationService compilationService;
+
+    private final CompilationServiceImpl compilationService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CompilationDto create(@Valid @RequestBody NewCompilationDto newCompilationDto) {
-        return compilationService.create(newCompilationDto);
+    public CompilationDto add(@Valid @RequestBody NewCompilationDto newCompilationDto) {
+        if (newCompilationDto.getTitle() == null || newCompilationDto.getTitle().isBlank())
+            throw new ValidationException("Название подборки не может быть пустым");
+        Compilation compilation =
+                compilationService.addCompilation(CompilationMapper.toCompilation(newCompilationDto));
+
+        return CompilationMapper.toCompilationDto(compilation);
     }
 
-    @PatchMapping("/{compId}")
-    @ResponseStatus(HttpStatus.OK)
-    public CompilationDto patch(@PathVariable Long compId,
-                                @Valid @RequestBody UpdateCompilationRequest updateCompilationRequest) {
-        return compilationService.patch(compId, updateCompilationRequest);
+    @PatchMapping("/{compilationId}")
+    public CompilationDto patch(
+            @PathVariable Long compilationId, @Valid @RequestBody NewCompilationDto newCompilationDto
+    ) {
+        Compilation compilation = compilationService
+                .updateCompilation(compilationId, CompilationMapper.toCompilation(newCompilationDto));
+
+        return CompilationMapper.toCompilationDto(compilation);
     }
 
-    @DeleteMapping("/{compId}")
+    @DeleteMapping("/{compilationId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable Long compId) {
-        compilationService.deleteById(compId);
+    public void delete(@PathVariable Long compilationId) {
+        compilationService.removeCompilation(compilationId);
     }
 }

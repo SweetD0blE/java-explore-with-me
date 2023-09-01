@@ -1,11 +1,8 @@
 package ru.practicum.ewm.main_service.category.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.ewm.main_service.MainCommon;
 import ru.practicum.ewm.main_service.category.dto.CategoryDto;
 import ru.practicum.ewm.main_service.category.service.CategoryService;
 
@@ -22,16 +19,17 @@ public class CategoryPublicController {
     private final CategoryService categoryService;
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<CategoryDto> getAll(
-            @RequestParam(defaultValue = MainCommon.PAGE_DEFAULT_FROM) @PositiveOrZero Integer from,
-            @RequestParam(defaultValue = MainCommon.PAGE_DEFAULT_SIZE) @Positive Integer size) {
-        return categoryService.getAll(PageRequest.of(from / size, size));
+    public List<CategoryDto> findAllCategories(@RequestParam(name = "from", defaultValue = "0")
+                                               @PositiveOrZero int from,
+                                               @RequestParam(name = "size", defaultValue = "10")
+                                               @Positive int size) {
+
+        return categoryService.findAllCategories(from,size);
     }
 
-    @GetMapping("/{catId}")
-    @ResponseStatus(HttpStatus.OK)
-    public CategoryDto getById(@PathVariable Long catId) {
-        return categoryService.getById(catId);
+    @GetMapping({"/{catId}"})
+    public CategoryDto findCategoryById(@PathVariable("catId") Long catId) {
+
+        return categoryService.findCategoryById(catId);
     }
 }

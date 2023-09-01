@@ -1,35 +1,34 @@
 package ru.practicum.ewm.main_service.event.service;
 
-import org.springframework.data.domain.Pageable;
 import ru.practicum.ewm.main_service.event.dto.*;
-import ru.practicum.ewm.main_service.event.enums.EventSort;
-import ru.practicum.ewm.main_service.event.enums.EventState;
 import ru.practicum.ewm.main_service.event.model.Event;
+import ru.practicum.ewm.main_service.event.util.EventState;
+import ru.practicum.ewm.main_service.request.dto.ParticipationRequestDto;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 
 public interface EventService {
-    List<EventFullDto> getEventsByAdmin(List<Long> users, List<EventState> states, List<Long> categories,
-                                        LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size);
+    EventFullDto addEvent(Long userId, NewEventDto newEventDto);
 
-    EventFullDto patchEventByAdmin(Long eventId, UpdateEventAdminRequest updateEventAdminRequest);
+    List<EventShortDto> findAllEventsByUserId(Long userId, int from, int size);
 
-    List<EventShortDto> getAllEventsByPrivate(Long userId, Pageable pageable);
+    EventFullDto findEventByUserId(Long userId, Long eventId);
 
-    EventFullDto createEventByPrivate(Long userId, NewEventDto newEventDto);
+    EventFullDto patchEventByUserId(Long userId, Long eventId, UpdateEventUserRequest updateEventUserRequest);
 
-    EventFullDto getEventByPrivate(Long userId, Long eventId);
+    Event validatedEvent(Long eventId);
 
-    EventFullDto patchEventByPrivate(Long userId, Long eventId, UpdateEventUserRequest updateEventUserRequest);
+    EventFullDto patchDataEventAndState(UpdateEventAdminRequest updateEventAdminRequest, Long eventsId);
 
-    List<EventShortDto> getEventsByPublic(SearchEventParams searchEventParams, EventSort sort,
-                                          Integer from, Integer size, HttpServletRequest request);
+    void updateConfirmedRequest(int confirmedRequest, Long eventId);
 
-    EventFullDto getEventByPublic(Long id, HttpServletRequest request);
+    List<EventFullDto> getAllEvents(List<Long> users, List<EventState> states, List<Long> categories, LocalDateTime startLocal, LocalDateTime endLocal, Integer from, Integer size);
 
-    Event getEventById(Long eventId);
+    List<EventShortDto> findAllEventsByText(String text, List<Long> categories, Boolean paid, LocalDateTime startLocal, LocalDateTime endLocal, Boolean onlyAvailable, String sortParam, Integer from, Integer size, HttpServletRequest request);
 
-    List<Event> getEventsByIds(List<Long> eventsId);
+    EventFullDto findEventById(Long eventId, HttpServletRequest request);
+
+    List<ParticipationRequestDto> findInfoRequestByEvent(Long userId, Long eventId);
 }

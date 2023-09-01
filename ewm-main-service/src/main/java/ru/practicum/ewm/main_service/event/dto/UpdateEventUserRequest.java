@@ -1,46 +1,41 @@
 package ru.practicum.ewm.main_service.event.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import ru.practicum.ewm.main_service.MainCommon;
-import ru.practicum.ewm.main_service.event.enums.EventStateAction;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import ru.practicum.ewm.main_service.location.model.Location;
 
-import javax.validation.Valid;
-import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@EqualsAndHashCode
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UpdateEventUserRequest {
-    @Size(min = MainCommon.MIN_LENGTH_ANNOTATION, max = MainCommon.MAX_LENGTH_ANNOTATION)
-    private String annotation;
 
-    private Long category;
+    @Size(max = 2000, min = 20)
+    String annotation;
 
-    @Size(min = MainCommon.MIN_LENGTH_DESCRIPTION, max = MainCommon.MAX_LENGTH_DESCRIPTION)
-    private String description;
+    Long categoryDto;
 
-    @JsonFormat(pattern = MainCommon.DT_FORMAT, shape = JsonFormat.Shape.STRING)
-    private LocalDateTime eventDate;
+    @Size(max = 7000, min = 20)
+    String description;
 
-    @Valid
-    private LocationDto location;
+    String eventDate;
 
-    private Boolean paid;
+    Location location;
 
-    @PositiveOrZero
-    private Integer participantLimit;
+    Boolean paid;
 
-    private Boolean requestModeration;
+    Integer participantLimit;
 
-    private EventStateAction stateAction;
+    Boolean requestModeration;
 
-    @Size(min = MainCommon.MIN_LENGTH_TITLE, max = MainCommon.MAX_LENGTH_TITLE)
-    private String title;
+    String stateAction;
+
+    @Size(max = 120, min = 3)
+    String title;
+
 }

@@ -1,18 +1,42 @@
 package ru.practicum.ewm.main_service.compilation.mapper;
 
-import org.springframework.stereotype.Component;
+import lombok.experimental.UtilityClass;
 import ru.practicum.ewm.main_service.compilation.dto.CompilationDto;
 import ru.practicum.ewm.main_service.compilation.dto.NewCompilationDto;
 import ru.practicum.ewm.main_service.compilation.model.Compilation;
-import ru.practicum.ewm.main_service.event.dto.EventShortDto;
+import ru.practicum.ewm.main_service.event.mapper.EventMapper;
 import ru.practicum.ewm.main_service.event.model.Event;
 
-import java.util.List;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
-@Component
-public interface CompilationMapper {
+@UtilityClass
+public class CompilationMapper {
 
-    Compilation newDtoToCompilation(NewCompilationDto newCompilationDto, List<Event> events);
+    public static CompilationDto toCompilationDto(Compilation compilation) {
+        return CompilationDto.builder()
+                .id(compilation.getId())
+                .pinned(compilation.getPinned() != null ? compilation.getPinned() : false)
+                .title(compilation.getTitle())
+                .events(compilation.getEvents() != null ? compilation.getEvents().stream()
+                        .map(EventMapper::toEventShortDto)
+                        .collect(Collectors.toList()) : Collections.emptyList()
+                )
+                .build();
+    }
 
-    CompilationDto toCompilationDto(Compilation compilation, List<EventShortDto> eventsShortDto);
+    public static Compilation toCompilation(NewCompilationDto newCompilationDto) {
+        Compilation.CompilationBuilder compilationBuilder =
+                Compilation.builder()
+                        .pinned(newCompilationDto.getPinned() != null ? newCompilationDto.getPinned() : false)
+                        .title(newCompilationDto.getTitle());
+
+        if (newCompilationDto.getEvents() != null && !newCompilationDto.getEvents().isEmpty())
+            compilationBuilder.events(
+                    newCompilationDto.getEvents()
+                            .stream().map(eventId -> Event.builder().id(eventId).build())
+                            .collect(Collectors.toSet())
+            );
+        return compilationBuilder.build();
+    }
 }

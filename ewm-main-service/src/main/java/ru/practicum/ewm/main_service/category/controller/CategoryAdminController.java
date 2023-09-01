@@ -1,36 +1,43 @@
 package ru.practicum.ewm.main_service.category.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.main_service.category.dto.CategoryDto;
-import ru.practicum.ewm.main_service.category.dto.NewCategoryDto;
 import ru.practicum.ewm.main_service.category.service.CategoryService;
 
 import javax.validation.Valid;
 
+@Validated
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/admin/categories")
 public class CategoryAdminController {
+
     private final CategoryService categoryService;
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public CategoryDto create(@Valid @RequestBody NewCategoryDto newCategoryDto) {
-        return categoryService.create(newCategoryDto);
+    @PostMapping()
+    public ResponseEntity<CategoryDto> addCategory(@Valid @RequestBody CategoryDto categoryDto) {
+        log.info("Запрос на создание категории");
+        return new ResponseEntity<>(categoryService.addCategory(categoryDto), HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{catId}")
-    @ResponseStatus(HttpStatus.OK)
-    public CategoryDto patch(@PathVariable Long catId,
-                             @Valid @RequestBody CategoryDto categoryDto) {
-        return categoryService.patch(catId, categoryDto);
+    @DeleteMapping("{catId}")
+    public ResponseEntity<Object> removeCategory(@PathVariable("catId") Long catId) {
+        log.info("Запрос на удаление категории");
+        categoryService.removeCategory(catId);
+        return new ResponseEntity<>("Категория удалена", HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping("/{catId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable Long catId) {
-        categoryService.deleteById(catId);
+    @PatchMapping("{catId}")
+    public CategoryDto patchCategory(@Valid @RequestBody CategoryDto categoryDto,
+                                     @PathVariable("catId") Long catId) {
+        log.info("Запрос на обновление категории");
+        return categoryService.patchCategory(categoryDto, catId);
     }
+
 }

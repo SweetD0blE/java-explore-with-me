@@ -1,15 +1,23 @@
 package ru.practicum.ewm.main_service.category.mapper;
 
-import org.springframework.stereotype.Component;
+import lombok.experimental.UtilityClass;
 import ru.practicum.ewm.main_service.category.dto.CategoryDto;
-import ru.practicum.ewm.main_service.category.dto.NewCategoryDto;
 import ru.practicum.ewm.main_service.category.model.Category;
 
-@Component
-public interface CategoryMapper {
-    Category newCategoryDtoToCategory(NewCategoryDto newCategoryDto);
+@UtilityClass
+public class CategoryMapper {
 
-    Category categoryDtoToCategory(CategoryDto categoryDto);
+    public static Category toCategory(CategoryDto categoryDto) {
+        return Category.builder()
+                .id(categoryDto.getId())
+                .name(categoryDto.getName())
+                .build();
+    }
 
-    CategoryDto toCategoryDto(Category category);
+    public static CategoryDto toCategoryDto(Category category) {
+        return CategoryDto.builder()
+                .id(category.getId())
+                .name(category.getName())
+                .build();
+    }
 }

@@ -1,36 +1,32 @@
 package ru.practicum.ewm.main_service.compilation.model;
 
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import ru.practicum.ewm.main_service.MainCommon;
+import lombok.experimental.FieldDefaults;
 import ru.practicum.ewm.main_service.event.model.Event;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
-@Entity
-@Table(name = "compilations", schema = "public")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Table(name = "COMPILATIONS")
 public class Compilation {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false, length = MainCommon.MAX_LENGTH_TITLE, unique = true)
-    private String title;
-
-    @Column(nullable = false)
-    private Boolean pinned;
-
+    Long id;
+    @Column(length = 2048)
+    String title;
+    Boolean pinned;
     @ManyToMany
     @JoinTable(name = "compilations_events",
-            joinColumns = @JoinColumn(name = "compilation_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"))
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<Event> events;
+            joinColumns = @JoinColumn(name = "compilation_id"),
+            inverseJoinColumns = @JoinColumn(name = "event_id"))
+    Set<Event> events;
+
 }

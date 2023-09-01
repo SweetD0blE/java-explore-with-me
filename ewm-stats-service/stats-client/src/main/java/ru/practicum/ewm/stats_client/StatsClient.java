@@ -1,78 +1,67 @@
 package ru.practicum.ewm.stats_client;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
-import ru.practicum.ewm.common_dto.Common;
 import ru.practicum.ewm.common_dto.EndpointHitDto;
+import ru.practicum.ewm.common_dto.ViewStatDto;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-@Service
+
+@Component
 @Slf4j
-public class StatsClient extends BaseClient {
-    @Autowired
-    public StatsClient(@Value("${app.stats-server.url:http://localhost:9090}") String serverUrl, RestTemplateBuilder builder) {
-        super(builder
-                .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
-                .build()
-        );
+public class StatsClient {
+    private  final RestTemplate restTemplate;
+    ObjectMapper mapper = new  ObjectMapper();
+
+    public static final String START = "2000-01-01 01:01:01";
+
+    public static final String END = "3000-01-01 01:01:01";
+
+    public StatsClient(RestTemplateBuilder builder) {
+        this.restTemplate = builder
+                .uriTemplateHandler(new DefaultUriBuilderFactory("http://stats-server:9090"))
+                .build();
     }
 
-    public ResponseEntity<Object> addHit(String name, String uri, String ip, LocalDateTime timestamp) {
-        log.info("Запрос на регистрацию обращения к name = {}, uri = {}, ip = {}, timestamp = {}",
-                name, uri, ip, timestamp);
-
-        EndpointHitDto endpointHit = EndpointHitDto.builder()
-                .app(name)
+    public void postHit(String uri, String ip) {
+        String app = "ewm-main-service";
+        EndpointHitDto hitDto = EndpointHitDto.builder()
+                .app(app)
                 .uri(uri)
                 .ip(ip)
-                .timestamp(LocalDateTime.parse(timestamp.format(Common.DT_FORMATTER)))
                 .build();
-        return post(Common.HIT_ENDPOINT, endpointHit);
-    }
-
-    public ResponseEntity<Object> getStats(LocalDateTime start, LocalDateTime end, List<String> uris) {
-        return getStats(start, end, uris, null);
-    }
-
-    public ResponseEntity<Object> getStats(LocalDateTime start, LocalDateTime end) {
-        return getStats(start, end, null, null);
-    }
-
-    public ResponseEntity<Object> getStats(LocalDateTime start, LocalDateTime end, Boolean unique) {
-        return getStats(start, end, null, unique);
-    }
-
-    public ResponseEntity<Object> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
-        log.info("Запрос на получение статистики по параметрам start = {}, end = {}, uris = {}, unique = {}",
-                start, end, uris, unique);
-
-        if (start == null || end == null || start.isAfter(end)) {
-            throw new IllegalArgumentException("Недопустимый интервал дат.");
+        try {
+            EndpointHitDto response = restTemplate.postForObject("/hit", hitDto, EndpointHitDto.class);
+            log.info("response: " + response);
+        } catch (Exception ex) {
+            log.error("error", ex);
+            throw new RuntimeException("Error in Stats service");
         }
-
-        StringBuilder uriBuilder = new StringBuilder(Common.STATS_ENDPOINT + "?start={start}&end={end}");
-        Map<String, Object> parameters = Map.of(
-                "start", start.format(Common.DT_FORMATTER),
-                "end", end.format(Common.DT_FORMATTER)
-        );
-
-        if (uris != null && !uris.isEmpty()) {
-            for (String uri : uris) {
-                uriBuilder.append("&uris=").append(uri);
-            }
-        }
-        if (unique != null) {
-            uriBuilder.append("&unique=").append(unique);
-        }
-
-        return get(uriBuilder.toString(), parameters);
     }
+
+    public Long getViews(String uri) {
+        List<String> uris = new ArrayList<>();
+        uris.add(uri);
+        Long views = 0L;
+
+
+        try {
+            List<ViewStatDto> response = mapper.convertValue(restTemplate.getForObject("/stats?start=" + START + "&end=" + END + "&uris=" + uri + "&unique=true", List.class), new TypeReference<List<ViewStatDto>>() {});
+            log.info("response = {}", response);
+            log.info("1stats = {}", response.get(0));
+            views = Long.valueOf(response.get(0).getHits());
+        } catch (Exception ex) {
+            log.error("error", ex);
+            throw new RuntimeException("Error in Stats service");
+        }
+        return views;
+    }
+
 }

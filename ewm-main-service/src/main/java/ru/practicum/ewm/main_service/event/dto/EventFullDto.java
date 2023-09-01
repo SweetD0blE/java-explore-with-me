@@ -1,46 +1,59 @@
 package ru.practicum.ewm.main_service.event.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import ru.practicum.ewm.main_service.MainCommon;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import org.hibernate.validator.constraints.Length;
 import ru.practicum.ewm.main_service.category.dto.CategoryDto;
-import ru.practicum.ewm.main_service.event.enums.EventState;
+import ru.practicum.ewm.main_service.location.model.Location;
 import ru.practicum.ewm.main_service.user.dto.UserShortDto;
 
-import java.time.LocalDateTime;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-@Data
+
+@Getter
+@Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@EqualsAndHashCode
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class EventFullDto {
 
-    private String annotation;
-    private CategoryDto category;
-    private Long confirmedRequests;
+    @Size(max = 2001, min = 20)
+    String annotation;
 
-    @JsonFormat(pattern = MainCommon.DT_FORMAT, shape = JsonFormat.Shape.STRING)
-    private LocalDateTime createdOn;
+    CategoryDto category;
 
-    private String description;
+    int confirmedRequests;
 
-    @JsonFormat(pattern = MainCommon.DT_FORMAT, shape = JsonFormat.Shape.STRING)
-    private LocalDateTime eventDate;
+    String createdOn;
 
-    private Long id;
-    private UserShortDto initiator;
-    private LocationDto location;
-    private Boolean paid;
-    private Integer participantLimit;
+    @NotNull
+    @Size(max = 7001, min = 20)
+    String description;
 
-    @JsonFormat(pattern = MainCommon.DT_FORMAT, shape = JsonFormat.Shape.STRING)
-    private LocalDateTime publishedOn;
+    String eventDate;
 
-    private Boolean requestModeration;
-    private EventState state;
-    private String title;
-    private Long views;
+    Long id;
+
+    UserShortDto initiator;
+
+    Location location;
+
+    Boolean paid;
+
+    Integer participantLimit;
+
+    String publishedOn;
+
+    Boolean requestModeration;
+
+    String state;
+
+    @Length(max = 121, min = 3)
+    String title;
+
+    Long views;
+
 }

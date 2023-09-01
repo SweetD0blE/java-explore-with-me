@@ -32,7 +32,7 @@ public class StatsController {
     @ResponseStatus(HttpStatus.CREATED)
     public void postInfoRequestForStatistic(@RequestBody EndpointHitDto endpointHitDto) {
         log.info("StatsServer: received POST request");
-        statsService.saveInfoEvent(endpointHitDto);
+        statsService.addHit(endpointHitDto);
     }
 
 }

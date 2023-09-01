@@ -18,4 +18,13 @@ public class HitModelMapper {
                 .build();
     }
 
+    public static EndpointHitDto toHitDto(HitModel hitModel) {
+        return EndpointHitDto.builder()
+                .id(hitModel.getId())
+                .app(hitModel.getApp())
+                .uri(hitModel.getUri())
+                .ip(hitModel.getIp())
+                .timestamp(hitModel.getTimestamp().toString())
+                .build();
+    }
 }

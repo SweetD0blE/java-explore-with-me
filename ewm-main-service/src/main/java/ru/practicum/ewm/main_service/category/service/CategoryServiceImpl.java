@@ -15,10 +15,10 @@ import ru.practicum.ewm.main_service.exception.NotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Slf4j
+@Service
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;

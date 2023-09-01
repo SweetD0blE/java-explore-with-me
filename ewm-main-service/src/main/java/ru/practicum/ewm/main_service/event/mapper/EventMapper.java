@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 
 @Component
 public interface EventMapper {
-
     Event toEvent(NewEventDto newEventDto, User initiator, Category category, Location location, LocalDateTime createdOn, EventState state);
 
     EventFullDto toEventFullDto(Event event, Long confirmedRequests, Long views);

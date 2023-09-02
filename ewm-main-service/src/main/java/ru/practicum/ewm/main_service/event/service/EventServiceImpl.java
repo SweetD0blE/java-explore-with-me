@@ -52,8 +52,6 @@ public class EventServiceImpl implements EventService {
     private final CategoryRepository categoryRepository;
     private final StatsClient client;
 
-
-
     @Override
     public Event validatedEvent(Long eventId) {
         return eventRepository.findById(eventId).orElseThrow(() -> new ObjectNotFoundException(String.format("События с id = %d не существует", eventId)));

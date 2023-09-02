@@ -58,8 +58,8 @@ public class StatsServiceImpl implements StatsService {
     }
 
     @Override
-    public EndpointHitDto addHit(EndpointHitDto statDto) {
-        HitModel hit = HitModelMapper.toEndpointHit(statDto);
+    public EndpointHitDto addHit(EndpointHitDto hitDto) {
+        HitModel hit = HitModelMapper.toEndpointHit(hitDto);
         hit.setTimestamp(LocalDateTime.now());
         statsRepository.save(hit);
         log.info("Информация по endpoint = {} сохранена", hit.getUri());

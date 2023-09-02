@@ -2,6 +2,7 @@ package ru.practicum.ewm.main_service.event.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.main_service.event.dto.EventFullDto;
@@ -14,14 +15,15 @@ import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/events")
-@Validated
 public class EventPublicController {
     private final EventService eventService;
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<EventShortDto> findAllEventsByText(
             @RequestParam(required = false) String text,
             @RequestParam(required = false) List<Long> categories,
@@ -39,6 +41,7 @@ public class EventPublicController {
     }
 
     @GetMapping("{eventId}")
+    @ResponseStatus(HttpStatus.OK)
     public EventFullDto findEventById(@PathVariable("eventId") Long eventId, HttpServletRequest request) {
         return eventService.findEventById(eventId, request);
     }

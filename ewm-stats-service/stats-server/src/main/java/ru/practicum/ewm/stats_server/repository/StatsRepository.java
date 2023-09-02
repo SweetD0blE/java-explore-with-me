@@ -15,7 +15,7 @@ public interface StatsRepository extends JpaRepository<HitModel, Long> {
     List<String> getDistinctUri();
 
     @Query(value = "select t.uri " +
-            "from ( select distinct on (s.ip) s.uri from HITS as s " +
+            "from (select distinct on (s.ip) s.uri from stats as s " +
             "where s.uri in (?1) " +
             "and s.timestamp > ?2 and s.timestamp < ?3) as t",
             nativeQuery = true)

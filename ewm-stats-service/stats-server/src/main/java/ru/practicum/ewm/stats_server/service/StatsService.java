@@ -9,6 +9,6 @@ public interface StatsService {
 
     List<ViewStatDto> findStatistic(String start, String end, List<String> uris, boolean unique);
 
-    EndpointHitDto addHit(EndpointHitDto statDto);
+    EndpointHitDto addHit(EndpointHitDto hitDto);
 
 }

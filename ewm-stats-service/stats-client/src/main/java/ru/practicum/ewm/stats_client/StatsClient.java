@@ -51,11 +51,12 @@ public class StatsClient {
         uris.add(uri);
         Long views = 0L;
 
-
         try {
-            List<ViewStatDto> response = mapper.convertValue(restTemplate.getForObject("/stats?start=" + START + "&end=" + END + "&uris=" + uri + "&unique=true", List.class), new TypeReference<List<ViewStatDto>>() {});
+            List<ViewStatDto> response = mapper.convertValue(restTemplate.getForObject(
+                    "/stats?start=" + START + "&end=" + END + "&uris=" + uri + "&unique=true", List.class),
+                    new TypeReference<>() {});
             log.info("response = {}", response);
-            log.info("1stats = {}", response.get(0));
+            log.info("stats = {}", response.get(0));
             views = Long.valueOf(response.get(0).getHits());
         } catch (Exception ex) {
             log.error("error", ex);

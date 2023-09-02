@@ -3,36 +3,34 @@ package ru.practicum.ewm.stats_server.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.common_dto.EndpointHitDto;
 import ru.practicum.ewm.common_dto.ViewStatDto;
-import ru.practicum.ewm.stats_server.service.StatsService;
+import ru.practicum.ewm.stats_server.service.StatsServiceImpl;
 
 import java.util.List;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/")
+@Slf4j
 public class StatsController {
 
-    private final StatsService statsService;
-
-    @GetMapping("/stats")
-    public List<ViewStatDto> getStatistic(@RequestParam(name = "start") String start,
-                                          @RequestParam(name = "end") String end,
-                                          @RequestParam(name = "uris", required = false) List<String> uris,
-                                          @RequestParam(name = "unique", required = false,
-                                                  defaultValue = "false") Boolean unique) {
-        log.info("StatsServer: received GET request");
-        return statsService.findStatistic(start, end, uris, unique);
-    }
+    private final StatsServiceImpl service;
 
     @PostMapping("/hit")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void postInfoRequestForStatistic(@RequestBody EndpointHitDto endpointHitDto) {
-        log.info("StatsServer: received POST request");
-        statsService.addHit(endpointHitDto);
+    public ResponseEntity<EndpointHitDto> createHit(@RequestBody EndpointHitDto hitDto) {
+        log.info("Создан запрос на сохранение информации к эндпоинту");
+        return new ResponseEntity<>(service.addHit(hitDto), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/stats")
+    public List<ViewStatDto> getAllStatistic(@RequestParam(value = "start") String start,
+                                             @RequestParam(value = "end") String end,
+                                             @RequestParam(value = "uris", defaultValue = "") List<String> uris,
+                                             @RequestParam(value = "unique", defaultValue = "false") boolean unique) {
+        log.info("Создан запрос на получение статистики посещаемости");
+        return service.findStatistic(start, end, uris, unique);
     }
 
 }

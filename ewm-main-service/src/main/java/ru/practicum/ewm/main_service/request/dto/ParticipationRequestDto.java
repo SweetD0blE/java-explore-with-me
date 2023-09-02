@@ -8,9 +8,9 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @EqualsAndHashCode
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ParticipationRequestDto {
+public final class ParticipationRequestDto {
 
     String created;
 

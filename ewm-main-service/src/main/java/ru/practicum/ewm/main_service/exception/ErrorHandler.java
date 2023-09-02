@@ -44,4 +44,12 @@ public class ErrorHandler {
         log.error(e.getMessage(), e);
         return new ErrorResponse(HttpStatus.CONFLICT, e.getMessage());
     }
+
+    @ExceptionHandler(Throwable.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleRuntimeException(Exception e) {
+        log.error(e.getMessage(), e);
+        return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+    }
+
 }

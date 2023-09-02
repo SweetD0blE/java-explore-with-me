@@ -9,10 +9,10 @@ import ru.practicum.ewm.main_service.user.dto.UserShortDto;
 @Setter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class EventShortDto {
+public final class EventShortDto {
 
     String annotation;
 

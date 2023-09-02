@@ -120,7 +120,7 @@ public class RequestServiceImpl implements RequestService {
         List<ParticipationRequestDto> rejectedParticipationRequest = new ArrayList<>();
         EventRequestStatusUpdateResult eventRequestStatusUpdateResult = new EventRequestStatusUpdateResult();
         if (requestStatus == RequestStatus.CONFIRMED)
-            requests.stream().forEach(request -> {
+            requests.forEach(request -> {
                 if (event.getConfirmedRequests() <= event.getParticipantLimit()) {
                     request.setStatus(RequestStatus.CONFIRMED);
                     event.setConfirmedRequests(event.getConfirmedRequests() + 1);

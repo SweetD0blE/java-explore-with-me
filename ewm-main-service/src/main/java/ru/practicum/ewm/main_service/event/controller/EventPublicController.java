@@ -7,6 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.main_service.event.dto.EventFullDto;
 import ru.practicum.ewm.main_service.event.dto.EventShortDto;
+import ru.practicum.ewm.main_service.event.dto.SearchObject;
 import ru.practicum.ewm.main_service.event.service.EventService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,19 +25,8 @@ public class EventPublicController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<EventShortDto> findAllEventsByText(
-            @RequestParam(required = false) String text,
-            @RequestParam(required = false) List<Long> categories,
-            @RequestParam(required = false) Boolean paid,
-            @RequestParam(required = false, name = "rangeStart")
-            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime startLocal,
-            @RequestParam(required = false, name = "rangeEnd")
-            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endLocal,
-            @RequestParam(defaultValue = "false") Boolean onlyAvailable,
-            @RequestParam(defaultValue = "EVENT_DATE", name = "sort") String sortParam,
-            @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
-            @Positive @RequestParam(name = "size", defaultValue = "11") Integer size, HttpServletRequest request) {
-        return eventService.findAllEventsByText(text, categories, paid, startLocal, endLocal, onlyAvailable, sortParam, from, size,request);
+    public List<EventShortDto> findAllEventsByText(SearchObject searchObject, HttpServletRequest request) {
+        return eventService.findAllEventsByText(searchObject, request);
 
     }
 

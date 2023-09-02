@@ -9,10 +9,10 @@ import java.util.List;
 @Setter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class EventRequestStatusUpdateRequest {
+public final class EventRequestStatusUpdateRequest {
 
     List<Long> requestIds;
 

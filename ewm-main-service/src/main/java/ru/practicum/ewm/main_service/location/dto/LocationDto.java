@@ -7,10 +7,10 @@ import lombok.experimental.FieldDefaults;
 @Setter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class LocationDto {
+public final class LocationDto {
 
     Float lat;
 

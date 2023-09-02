@@ -15,10 +15,10 @@ import javax.validation.constraints.Size;
 @Setter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class EventFullDto {
+public final class EventFullDto {
 
     @Size(max = 2001, min = 20)
     String annotation;

@@ -17,16 +17,19 @@ import java.util.List;
 @Component
 @Slf4j
 public class StatsClient {
-    private  final RestTemplate restTemplate;
-    ObjectMapper mapper = new  ObjectMapper();
 
     public static final String START = "2000-01-01 01:01:01";
 
     public static final String END = "3000-01-01 01:01:01";
 
+    public static final String HTTP = "http://stats-server:9090";
+
+    private final RestTemplate restTemplate;
+    ObjectMapper mapper = new  ObjectMapper();
+
     public StatsClient(RestTemplateBuilder builder) {
         this.restTemplate = builder
-                .uriTemplateHandler(new DefaultUriBuilderFactory("http://stats-server:9090"))
+                .uriTemplateHandler(new DefaultUriBuilderFactory(HTTP))
                 .build();
     }
 
@@ -40,7 +43,7 @@ public class StatsClient {
         try {
             EndpointHitDto response = restTemplate.postForObject("/hit", hitDto, EndpointHitDto.class);
             log.info("response: " + response);
-        } catch (Exception ex) {
+        } catch (RuntimeException ex) {
             log.error("error", ex);
             throw new RuntimeException("Error in Stats service");
         }
@@ -58,7 +61,7 @@ public class StatsClient {
             log.info("response = {}", response);
             log.info("stats = {}", response.get(0));
             views = Long.valueOf(response.get(0).getHits());
-        } catch (Exception ex) {
+        } catch (RuntimeException ex) {
             log.error("error", ex);
             throw new RuntimeException("Error in Stats service");
         }

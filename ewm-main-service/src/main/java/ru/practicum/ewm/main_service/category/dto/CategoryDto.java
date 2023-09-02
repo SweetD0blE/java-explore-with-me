@@ -10,11 +10,11 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @EqualsAndHashCode
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @Builder
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CategoryDto {
+public final class CategoryDto {
 
     Long id;
 

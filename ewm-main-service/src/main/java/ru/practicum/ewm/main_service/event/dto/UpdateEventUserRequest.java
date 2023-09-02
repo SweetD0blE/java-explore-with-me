@@ -10,10 +10,10 @@ import javax.validation.constraints.Size;
 @Setter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @EqualsAndHashCode
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class UpdateEventUserRequest {
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+public final class UpdateEventUserRequest {
 
     @Size(max = 2000, min = 20)
     String annotation;

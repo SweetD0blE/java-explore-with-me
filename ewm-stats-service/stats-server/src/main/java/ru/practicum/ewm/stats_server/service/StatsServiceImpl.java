@@ -5,10 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.ewm.common_dto.EndpointHitDto;
 import ru.practicum.ewm.common_dto.ViewStatDto;
+import ru.practicum.ewm.stats_server.exception.ValidationException;
 import ru.practicum.ewm.stats_server.mapper.HitModelMapper;
 import ru.practicum.ewm.stats_server.model.HitModel;
 import ru.practicum.ewm.stats_server.repository.StatsRepository;
-import ru.practicum.ewm.stats_server.exception.ValidationException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

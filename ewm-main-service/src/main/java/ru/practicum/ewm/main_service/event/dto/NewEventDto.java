@@ -12,11 +12,11 @@ import javax.validation.constraints.Size;
 @Setter
 @EqualsAndHashCode
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @Builder
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class NewEventDto {
+public final class NewEventDto {
 
     @Size(max = 2000, min = 20)
     @NotNull

@@ -11,10 +11,10 @@ import javax.validation.constraints.NotEmpty;
 @Setter
 @EqualsAndHashCode
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserShortDto {
+public final class UserShortDto {
 
     Long id;
 

@@ -26,7 +26,7 @@ public interface EventService {
 
     List<EventFullDto> getAllEvents(List<Long> users, List<EventState> states, List<Long> categories, LocalDateTime startLocal, LocalDateTime endLocal, Integer from, Integer size);
 
-    List<EventShortDto> findAllEventsByText(String text, List<Long> categories, Boolean paid, LocalDateTime startLocal, LocalDateTime endLocal, Boolean onlyAvailable, String sortParam, Integer from, Integer size, HttpServletRequest request);
+    List<EventShortDto> findAllEventsByText(SearchObject searchObject, HttpServletRequest request);
 
     EventFullDto findEventById(Long eventId, HttpServletRequest request);
 

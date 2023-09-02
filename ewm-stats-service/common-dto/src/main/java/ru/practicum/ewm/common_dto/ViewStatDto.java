@@ -7,11 +7,11 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @ToString
-public class ViewStatDto {
+public final class ViewStatDto {
 
     String app;
 

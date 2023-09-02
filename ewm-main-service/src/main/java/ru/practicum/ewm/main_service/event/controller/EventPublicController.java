@@ -34,7 +34,7 @@ public class EventPublicController {
             @RequestParam(defaultValue = "false") Boolean onlyAvailable,
             @RequestParam(defaultValue = "EVENT_DATE", name = "sort") String sortParam,
             @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
-            @Positive @RequestParam(name = "size", defaultValue = "11") Integer size, HttpServletRequest request) {
+            @Positive @RequestParam(name = "size", defaultValue = "10") Integer size, HttpServletRequest request) {
         return eventService.findAllEventsByText(text, categories, paid, startLocal, endLocal, onlyAvailable,
                 sortParam, from, size,request);
 

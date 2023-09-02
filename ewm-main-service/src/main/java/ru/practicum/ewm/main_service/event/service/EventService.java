@@ -2,6 +2,7 @@ package ru.practicum.ewm.main_service.event.service;
 
 import ru.practicum.ewm.main_service.event.dto.*;
 import ru.practicum.ewm.main_service.event.model.Event;
+import ru.practicum.ewm.main_service.event.util.EventState;
 import ru.practicum.ewm.main_service.request.dto.ParticipationRequestDto;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +24,7 @@ public interface EventService {
 
     void updateConfirmedRequest(int confirmedRequest, Long eventId);
 
-    List<EventFullDto> getAllEvents(SearchObject searchObject);
+    List<EventFullDto> getAllEvents(List<Long> users, List<EventState> states, List<Long> categories, LocalDateTime startLocal, LocalDateTime endLocal, Integer from, Integer size);
 
     List<EventShortDto> findAllEventsByText(String text, List<Long> categories, Boolean paid,
                                             LocalDateTime startLocal, LocalDateTime endLocal, Boolean onlyAvailable,

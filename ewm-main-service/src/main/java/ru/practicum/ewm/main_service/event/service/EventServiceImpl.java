@@ -52,6 +52,8 @@ public class EventServiceImpl implements EventService {
     private final CategoryRepository categoryRepository;
     private final StatsClient client;
 
+
+
     @Override
     public Event validatedEvent(Long eventId) {
         return eventRepository.findById(eventId).orElseThrow(() -> new ObjectNotFoundException(String.format("События с id = %d не существует", eventId)));
@@ -158,7 +160,7 @@ public class EventServiceImpl implements EventService {
             }
         }
 
-        if (event.getState() == EventState.PUBLISHED) {
+        if (event.getState().equals(EventState.PUBLISHED)) {
             throw new ConflictException("Событие уже опубликовано");
         }
         if (updateEventUserRequest.getStateAction() != null) {
@@ -185,21 +187,22 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<EventFullDto> getAllEvents(SearchObject searchObject) {
+    public List<EventFullDto> getAllEvents(List<Long> users, List<EventState> states, List<Long> categories,
+                                           LocalDateTime startLocal, LocalDateTime endLocal, Integer from, Integer size) {
         Sort sortByDate = Sort.by(Sort.Direction.ASC, "id");
-        PageRequest page = PageRequest.of(searchObject.getFrom() / searchObject.getSize(), searchObject.getSize(), sortByDate);
+        PageRequest page = PageRequest.of(from / size, size,sortByDate);
         LocalDateTime start;
-        if (searchObject.getUsers().isEmpty()) {
-            userRepository.findAll().stream().map(User::getId).collect(Collectors.toList());
+        if (users.isEmpty()) {
+            users = userRepository.findAll().stream().map(User::getId).collect(Collectors.toList());
         }
-        if (searchObject.getStartLocal() != null) {
-            start = searchObject.getStartLocal();
+        if (startLocal != null) {
+            start = startLocal;
         } else {
             start = LocalDateTime.now();
         }
         LocalDateTime end;
-        if (searchObject.getEndLocal() != null) {
-            end = searchObject.getEndLocal();
+        if (endLocal != null) {
+            end = endLocal;
         } else {
             end = LocalDateTime.of(3333, 3, 3, 3, 3);
         }
@@ -207,7 +210,7 @@ public class EventServiceImpl implements EventService {
             throw new IllegalArgumentException("Неправильный запрос");
         }
 
-        List<Event> events = eventRepository.findByInitiatorIdIn(searchObject.getUsers(), page);
+        List<Event> events = eventRepository.findByInitiatorIdIn(users, page);
 
         return events.stream().map(EventMapper::toEventFullDto).collect(Collectors.toList());
     }
@@ -239,9 +242,8 @@ public class EventServiceImpl implements EventService {
         if (end.isBefore(LocalDateTime.now()) || end.isBefore(start)) {
             throw new ValidationException("Неправильный запрос");
         }
-
-        List<Event> events = eventRepository.searchEventsByAnnotationContainsOrDescriptionContainsAndCategoryIdInAndPaidAndCreatedOnBetween(
-                text, text, categories, paid, startLocal, endLocal, page);
+        List<Event> events = eventRepository.searchEventsByAnnotationContainsOrDescriptionContainsAndCategoryIdInAndPaidAndCreatedOnBetween(text, text, categories, paid, startLocal, endLocal, page).stream()
+                .filter(event -> event.getParticipantLimit() > event.getConfirmedRequests()).collect(Collectors.toList());
         if (sortParam.equals("EVENT_DATE")) {
             events = events.stream().sorted(Comparator.comparing(Event::getEventDate)).collect(Collectors.toList());
         } else if (sortParam.equals("VIEWS")) {

@@ -185,22 +185,21 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<EventFullDto> getAllEvents(List<Long> users, List<EventState> states, List<Long> categories,
-                                           LocalDateTime startLocal, LocalDateTime endLocal, Integer from, Integer size) {
+    public List<EventFullDto> getAllEvents(SearchObject searchObject) {
         Sort sortByDate = Sort.by(Sort.Direction.ASC, "id");
-        PageRequest page = PageRequest.of(from / size, size,sortByDate);
+        PageRequest page = PageRequest.of(searchObject.getFrom() / searchObject.getSize(), searchObject.getSize(), sortByDate);
         LocalDateTime start;
-        if (users.isEmpty()) {
-            users = userRepository.findAll().stream().map(User::getId).collect(Collectors.toList());
+        if (searchObject.getUsers().isEmpty()) {
+            userRepository.findAll().stream().map(User::getId).collect(Collectors.toList());
         }
-        if (startLocal != null) {
-            start = startLocal;
+        if (searchObject.getStartLocal() != null) {
+            start = searchObject.getStartLocal();
         } else {
             start = LocalDateTime.now();
         }
         LocalDateTime end;
-        if (endLocal != null) {
-            end = endLocal;
+        if (searchObject.getEndLocal() != null) {
+            end = searchObject.getEndLocal();
         } else {
             end = LocalDateTime.of(3333, 3, 3, 3, 3);
         }
@@ -208,7 +207,7 @@ public class EventServiceImpl implements EventService {
             throw new IllegalArgumentException("Неправильный запрос");
         }
 
-        List<Event> events = eventRepository.findByInitiatorIdIn(users, page);
+        List<Event> events = eventRepository.findByInitiatorIdIn(searchObject.getUsers(), page);
 
         return events.stream().map(EventMapper::toEventFullDto).collect(Collectors.toList());
     }

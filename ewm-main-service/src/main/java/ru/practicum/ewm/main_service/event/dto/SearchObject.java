@@ -3,6 +3,7 @@ package ru.practicum.ewm.main_service.event.dto;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
+import ru.practicum.ewm.main_service.event.util.EventState;
 
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
@@ -21,6 +22,10 @@ public class SearchObject {
     String text;
 
     List<Long> categories;
+
+    List<EventState> states;
+
+    List<Long> users;
 
     Boolean paid;
 

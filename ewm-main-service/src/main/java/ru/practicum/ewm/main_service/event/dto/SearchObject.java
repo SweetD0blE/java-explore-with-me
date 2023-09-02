@@ -43,5 +43,5 @@ public class SearchObject {
     Integer from = 0;
 
     @Positive
-    Integer size = 11;
+    Integer size = 10;
 }

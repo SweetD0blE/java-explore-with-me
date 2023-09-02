@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import ru.practicum.ewm.main_service.category.model.Category;
-import ru.practicum.ewm.main_service.event.dto.SearchEventObject;
+import ru.practicum.ewm.main_service.event.dto.SearchObject;
 import ru.practicum.ewm.main_service.event.model.Event;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     List<Event> findByInitiatorIdIn(List<Long> users, PageRequest pageRequest);
 
-    List<Event> searchEventsByAnnotationContainsOrDescriptionContainsAndCategoryIdInAndPaidAndCreatedOnBetween(SearchEventObject searchEventObject, PageRequest pageRequest);
+    List<Event> searchEventsByAnnotationContainsOrDescriptionContainsAndCategoryIdInAndPaidAndCreatedOnBetween(SearchObject searchObject, PageRequest pageRequest);
 
     Optional<Event> findByCategory(Category category);
 

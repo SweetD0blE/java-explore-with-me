@@ -238,7 +238,9 @@ public class EventServiceImpl implements EventService {
         if (end.isBefore(LocalDateTime.now()) || end.isBefore(start)) {
             throw new ValidationException("Неправильный запрос");
         }
-        List<Event> events = eventRepository.searchEventsByAnnotationContainsOrDescriptionContainsAndCategoryIdInAndPaidAndCreatedOnBetween(new SearchEventObject(), page).stream()
+
+        List<Event> events = eventRepository.searchEventsByAnnotationContainsOrDescriptionContainsAndCategoryIdInAndPaidAndCreatedOnBetween(
+                       searchObject, page).stream()
                 .filter(event -> event.getParticipantLimit() > event.getConfirmedRequests()).collect(Collectors.toList());
         if (searchObject.getSortParam().equals("EVENT_DATE")) {
             events = events.stream().sorted(Comparator.comparing(Event::getEventDate)).collect(Collectors.toList());

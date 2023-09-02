@@ -8,8 +8,6 @@ import ru.practicum.ewm.main_service.category.model.Category;
 import ru.practicum.ewm.main_service.event.dto.SearchEventObject;
 import ru.practicum.ewm.main_service.event.model.Event;
 
-import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 

@@ -1,12 +1,6 @@
 package ru.practicum.ewm.main_service.event.dto;
 
-import lombok.Setter;
-import lombok.Getter;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.AccessLevel;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
 

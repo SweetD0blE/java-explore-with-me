@@ -105,7 +105,7 @@ public class RequestServiceImpl implements RequestService {
     public EventRequestStatusUpdateResult patchStatusRequestByCurrentUser(EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest, Long userId, Long eventId) {
         Event event = eventService.validatedEvent(eventId);
         if (event.getConfirmedRequests() >= event.getParticipantLimit() && event.getParticipantLimit() != 0) {
-            throw new ConflictException("Подтевржденные запросы закончились");
+            throw new ConflictException("Подтвержденные запросы закончились");
         }
         List<Long> requestIds = eventRequestStatusUpdateRequest.getRequestIds();
         List<Request> requests = requestRepository.findAllById(requestIds);
@@ -120,7 +120,7 @@ public class RequestServiceImpl implements RequestService {
         List<ParticipationRequestDto> rejectedParticipationRequest = new ArrayList<>();
         EventRequestStatusUpdateResult eventRequestStatusUpdateResult = new EventRequestStatusUpdateResult();
         if (requestStatus == RequestStatus.CONFIRMED)
-            requests.stream().forEach(request -> {
+            requests.forEach(request -> {
                 if (event.getConfirmedRequests() <= event.getParticipantLimit()) {
                     request.setStatus(RequestStatus.CONFIRMED);
                     event.setConfirmedRequests(event.getConfirmedRequests() + 1);
@@ -133,7 +133,7 @@ public class RequestServiceImpl implements RequestService {
             );
 
         for (Request request : requests) {
-            if (request.getStatus().equals(RequestStatus.CONFIRMED)) {
+            if (request.getStatus() == (RequestStatus.CONFIRMED)) {
                 confirmedParticipationRequest.add(RequestMapper.toParticipationRequestDto(request));
             } else {
                 rejectedParticipationRequest.add(RequestMapper.toParticipationRequestDto(request));

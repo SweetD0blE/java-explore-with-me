@@ -160,7 +160,7 @@ public class EventServiceImpl implements EventService {
             }
         }
 
-        if (event.getState().equals(EventState.PUBLISHED)) {
+        if (event.getState() == (EventState.PUBLISHED)) {
             throw new ConflictException("Событие уже опубликовано");
         }
         if (updateEventUserRequest.getStateAction() != null) {

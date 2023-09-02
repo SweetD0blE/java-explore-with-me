@@ -14,6 +14,7 @@ import ru.practicum.ewm.main_service.exception.ConflictException;
 import ru.practicum.ewm.main_service.exception.ObjectNotFoundException;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,7 +53,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDto patchCategory(CategoryDto categoryDto, Long catId) {
         categoryDto.setId(catId);
         Category category = validateCategory(catId);
-        if (categoryDto.getName().equals(category.getName())) {
+        if (Objects.equals(categoryDto.getName(), category.getName())) {
             return categoryDto;
         }
         if (categoryRepository.findByName(categoryDto.getName()).isPresent()) {

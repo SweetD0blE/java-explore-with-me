@@ -43,7 +43,7 @@ public class StatsClient {
         try {
             EndpointHitDto response = restTemplate.postForObject("/hit", hitDto, EndpointHitDto.class);
             log.info("response: " + response);
-        } catch (Exception ex) {
+        } catch (RuntimeException ex) {
             log.error("error", ex);
             throw new RuntimeException("Error in Stats service");
         }
@@ -61,7 +61,7 @@ public class StatsClient {
             log.info("response = {}", response);
             log.info("stats = {}", response.get(0));
             views = Long.valueOf(response.get(0).getHits());
-        } catch (Exception ex) {
+        } catch (RuntimeException ex) {
             log.error("error", ex);
             throw new RuntimeException("Error in Stats service");
         }

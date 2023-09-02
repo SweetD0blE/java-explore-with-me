@@ -8,6 +8,7 @@ import ru.practicum.ewm.common_dto.ViewStatDto;
 import ru.practicum.ewm.stats_server.mapper.HitModelMapper;
 import ru.practicum.ewm.stats_server.model.HitModel;
 import ru.practicum.ewm.stats_server.repository.StatsRepository;
+import ru.practicum.ewm.main_service.exception.ValidationException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -28,6 +29,9 @@ public class StatsServiceImpl implements StatsService {
     public List<ViewStatDto> findStatistic(String start, String end, List<String> uris, boolean unique) {
         LocalDateTime from = LocalDateTime.parse(start, FORMATTER);
         LocalDateTime to = LocalDateTime.parse(end, FORMATTER);
+        if (from.isAfter(to)) {
+            throw new ValidationException("start is after end");
+        }
         if (uris == null || uris.size() == 0 || uris.get(0).equals("events/") || uris.get(0).isBlank()) {
             uris = statsRepository.getDistinctUri();
             log.info("Сколько было запросов {}", uris);

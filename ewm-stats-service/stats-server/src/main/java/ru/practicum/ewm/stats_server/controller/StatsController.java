@@ -9,6 +9,7 @@ import ru.practicum.ewm.common_dto.EndpointHitDto;
 import ru.practicum.ewm.common_dto.ViewStatDto;
 import ru.practicum.ewm.stats_server.service.StatsServiceImpl;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -25,8 +26,8 @@ public class StatsController {
     }
 
     @GetMapping("/stats")
-    public List<ViewStatDto> getAllStatistic(@RequestParam(value = "start") String start,
-                                             @RequestParam(value = "end") String end,
+    public List<ViewStatDto> getAllStatistic(@RequestParam(value = "start") @NotNull String start,
+                                             @RequestParam(value = "end") @NotNull String end,
                                              @RequestParam(value = "uris", defaultValue = "") List<String> uris,
                                              @RequestParam(value = "unique", defaultValue = "false") boolean unique) {
         log.info("Создан запрос на получение статистики посещаемости");

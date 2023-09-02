@@ -51,7 +51,7 @@ public class RequestServiceImpl implements RequestService {
         if (Objects.equals(event.getInitiator().getId(), userId)) {
             throw new ConflictException("Запрашивающий является инициатором события");
         }
-        if (event.getState() == EventState.PUBLISHED) {
+        if (!event.getState().equals(EventState.PUBLISHED)) {
             throw new ConflictException("Событие не опубликовано");
         }
 
@@ -120,7 +120,7 @@ public class RequestServiceImpl implements RequestService {
         List<ParticipationRequestDto> rejectedParticipationRequest = new ArrayList<>();
         EventRequestStatusUpdateResult eventRequestStatusUpdateResult = new EventRequestStatusUpdateResult();
         if (requestStatus == RequestStatus.CONFIRMED)
-            requests.forEach(request -> {
+            requests.stream().forEach(request -> {
                 if (event.getConfirmedRequests() <= event.getParticipantLimit()) {
                     request.setStatus(RequestStatus.CONFIRMED);
                     event.setConfirmedRequests(event.getConfirmedRequests() + 1);
@@ -144,5 +144,4 @@ public class RequestServiceImpl implements RequestService {
         eventService.updateConfirmedRequest(confirmedParticipationRequest.size(), eventId);
         return eventRequestStatusUpdateResult;
     }
-
 }

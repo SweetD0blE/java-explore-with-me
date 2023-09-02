@@ -214,23 +214,25 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<EventShortDto> findAllEventsByText(SearchObject searchObject, HttpServletRequest request) {
+    public List<EventShortDto> findAllEventsByText(String text, List<Long> categories, Boolean paid,
+                                                   LocalDateTime startLocal, LocalDateTime endLocal, Boolean onlyAvailable,
+                                                   String sortParam, Integer from, Integer size, HttpServletRequest request) {
         Sort sortByDate = Sort.by(Sort.Direction.ASC, "id");
-        Integer index = searchObject.getFrom() / searchObject.getSize();
-        PageRequest page = PageRequest.of(index, searchObject.getSize(), sortByDate);
+        Integer index = from  / size;
+        PageRequest page = PageRequest.of(index, size, sortByDate);
         LocalDateTime start;
 
-        if (searchObject.getCategories() == null || searchObject.getCategories().isEmpty()) {
-             categoryRepository.findAll().stream().map(Category::getId).collect(Collectors.toList());
+        if (categories == null || categories.isEmpty()) {
+            categories = categoryRepository.findAll().stream().map(Category::getId).collect(Collectors.toList());
         }
-        if (searchObject.getStartLocal() != null) {
-            start = searchObject.getStartLocal();
+        if (startLocal != null) {
+            start = startLocal;
         } else {
             start = LocalDateTime.now();
         }
         LocalDateTime end;
-        if (searchObject.getEndLocal() != null) {
-            end = searchObject.getEndLocal();
+        if (endLocal != null) {
+            end = endLocal;
         } else {
             end = LocalDateTime.of(3333, 3, 3, 3, 3);
         }
@@ -239,11 +241,10 @@ public class EventServiceImpl implements EventService {
         }
 
         List<Event> events = eventRepository.searchEventsByAnnotationContainsOrDescriptionContainsAndCategoryIdInAndPaidAndCreatedOnBetween(
-                       searchObject, page).stream()
-                .filter(event -> event.getParticipantLimit() > event.getConfirmedRequests()).collect(Collectors.toList());
-        if (searchObject.getSortParam().equals("EVENT_DATE")) {
+                text, text, categories, paid, startLocal, endLocal, page);
+        if (sortParam.equals("EVENT_DATE")) {
             events = events.stream().sorted(Comparator.comparing(Event::getEventDate)).collect(Collectors.toList());
-        } else if (searchObject.getSortParam().equals("VIEWS")) {
+        } else if (sortParam.equals("VIEWS")) {
             events = events.stream().sorted(Comparator.comparing(Event::getViews)).collect(Collectors.toList());
         }
         if (events.isEmpty()) {

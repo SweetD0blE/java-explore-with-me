@@ -5,6 +5,7 @@ import ru.practicum.ewm.main_service.event.model.Event;
 import ru.practicum.ewm.main_service.request.dto.ParticipationRequestDto;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface EventService {
@@ -24,7 +25,9 @@ public interface EventService {
 
     List<EventFullDto> getAllEvents(SearchObject searchObject);
 
-    List<EventShortDto> findAllEventsByText(SearchObject searchObject, HttpServletRequest request);
+    List<EventShortDto> findAllEventsByText(String text, List<Long> categories, Boolean paid,
+                                            LocalDateTime startLocal, LocalDateTime endLocal, Boolean onlyAvailable,
+                                            String sortParam, Integer from, Integer size, HttpServletRequest request);
 
     EventFullDto findEventById(Long eventId, HttpServletRequest request);
 

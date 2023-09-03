@@ -66,11 +66,11 @@ public class EventServiceImpl implements EventService {
         CategoryDto category = categoryService.findCategoryById(updateEventAdminRequest.getCategory() != null ?
                 updateEventAdminRequest.getCategory() : event.getCategory().getId());
         EventFullDto eventFullDto = EventMapper.toUpdateEventAdminRequest(updateEventAdminRequest, event, category);
-        if (event.getState().equals(EventState.PUBLISHED)) {
+        if (EventState.PUBLISHED.equals(event.getState())) {
             throw new ConflictException("Событие уже опубликовано");
         }
 
-        if (event.getState().equals(EventState.CANCELED)) {
+        if (EventState.CANCELED.equals(event.getState())) {
             throw new ConflictException("Событие уже отменено");
         }
         if (updateEventAdminRequest.getStateAction() != null) {
@@ -160,7 +160,7 @@ public class EventServiceImpl implements EventService {
             }
         }
 
-        if (event.getState() == (EventState.PUBLISHED)) {
+        if (EventState.PUBLISHED.equals(event.getState())) {
             throw new ConflictException("Событие уже опубликовано");
         }
         if (updateEventUserRequest.getStateAction() != null) {
@@ -262,7 +262,7 @@ public class EventServiceImpl implements EventService {
     public EventFullDto findEventById(Long eventId, HttpServletRequest request) {
 
         Event event = validatedEvent(eventId);
-        if (event.getState() != EventState.PUBLISHED) {
+        if (!EventState.PUBLISHED.equals(event.getState())) {
             throw new ObjectNotFoundException("Событие не опубликовано");
         }
         client.postHit(request.getRequestURI(), request.getRemoteAddr());

@@ -11,7 +11,7 @@ import ru.practicum.ewm.main_service.user.dto.UserShortDto;
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
 @EqualsAndHashCode
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public final class EventShortDto {
 
     String annotation;

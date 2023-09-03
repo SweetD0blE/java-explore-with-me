@@ -51,7 +51,7 @@ public class RequestServiceImpl implements RequestService {
         if (Objects.equals(event.getInitiator().getId(), userId)) {
             throw new ConflictException("Запрашивающий является инициатором события");
         }
-        if (!event.getState().equals(EventState.PUBLISHED)) {
+        if (!EventState.PUBLISHED.equals(event.getState())) {
             throw new ConflictException("Событие не опубликовано");
         }
 

@@ -32,9 +32,11 @@ public class StatsServiceImpl implements StatsService {
         if (from.isAfter(to)) {
             throw new ValidationException("start is after end");
         }
-        if (uris == null || uris.size() == 0 || uris.get(0).equals("events/") || uris.get(0).isBlank()) {
-            uris = statsRepository.getDistinctUri();
-            log.info("Сколько было запросов {}", uris);
+        if (uris != null) {
+            if (uris == null || uris.size() == 0 || uris.get(0).equals("events/") || uris.get(0).isBlank()) {
+                uris = statsRepository.getDistinctUri();
+                log.info("Сколько было запросов {}", uris);
+            }
         }
         List<ViewStatDto> listDTO = new ArrayList<>();
         List<String> urisToListUnique;

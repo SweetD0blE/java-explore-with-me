@@ -9,9 +9,8 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor(force = true)
 @Builder
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @ToString
 public final class EndpointHitDto {
 

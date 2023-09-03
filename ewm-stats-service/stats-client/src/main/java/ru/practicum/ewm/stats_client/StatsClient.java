@@ -22,14 +22,14 @@ public class StatsClient {
 
     public static final String END = "3000-01-01 01:01:01";
 
-    public static final String HTTP = "http://stats-server:9090";
+    public static final String STATS_SERVER_URL = "http://stats-server:9090";
 
     private final RestTemplate restTemplate;
     ObjectMapper mapper = new  ObjectMapper();
 
     public StatsClient(RestTemplateBuilder builder) {
         this.restTemplate = builder
-                .uriTemplateHandler(new DefaultUriBuilderFactory(HTTP))
+                .uriTemplateHandler(new DefaultUriBuilderFactory(STATS_SERVER_URL))
                 .build();
     }
 
@@ -43,7 +43,7 @@ public class StatsClient {
         try {
             EndpointHitDto response = restTemplate.postForObject("/hit", hitDto, EndpointHitDto.class);
             log.info("response: " + response);
-        } catch (RuntimeException ex) {
+        } catch (IllegalArgumentException ex) {
             log.error("error", ex);
             throw new RuntimeException("Error in Stats service");
         }
@@ -61,7 +61,7 @@ public class StatsClient {
             log.info("response = {}", response);
             log.info("stats = {}", response.get(0));
             views = Long.valueOf(response.get(0).getHits());
-        } catch (RuntimeException ex) {
+        } catch (IllegalArgumentException ex) {
             log.error("error", ex);
             throw new RuntimeException("Error in Stats service");
         }

@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @EqualsAndHashCode
 @AllArgsConstructor
-@NoArgsConstructor(force = true)
+@NoArgsConstructor
 @Builder
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)

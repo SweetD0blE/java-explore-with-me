@@ -12,9 +12,8 @@ import javax.validation.constraints.NotEmpty;
 @Setter
 @EqualsAndHashCode
 @AllArgsConstructor
-@NoArgsConstructor(force = true)
 @Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public final class UserDto {
 
     Long id;

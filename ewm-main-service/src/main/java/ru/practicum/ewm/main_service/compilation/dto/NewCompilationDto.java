@@ -10,9 +10,8 @@ import java.util.Set;
 @Setter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
 @EqualsAndHashCode
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class NewCompilationDto {
 
     private Boolean pinned;

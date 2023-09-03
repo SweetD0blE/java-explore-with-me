@@ -23,13 +23,11 @@ public class CategoryPublicController {
                                                @PositiveOrZero int from,
                                                @RequestParam(name = "size", defaultValue = "10")
                                                @Positive int size) {
-
         return categoryService.findAllCategories(from,size);
     }
 
     @GetMapping({"/{catId}"})
     public CategoryDto findCategoryById(@PathVariable("catId") Long catId) {
-
         return categoryService.findCategoryById(catId);
     }
 }

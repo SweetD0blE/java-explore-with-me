@@ -1,7 +1,6 @@
 package ru.practicum.ewm.main_service.event.controller;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.main_service.event.dto.EventFullDto;
@@ -16,7 +15,6 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@Slf4j
 @RequestMapping("/events")
 public class EventPublicController {
 

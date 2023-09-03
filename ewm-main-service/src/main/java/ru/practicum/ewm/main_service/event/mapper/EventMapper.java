@@ -12,7 +12,6 @@ import ru.practicum.ewm.main_service.utility.TimeUtil;
 
 import java.time.LocalDateTime;
 
-
 @UtilityClass
 public class EventMapper {
 

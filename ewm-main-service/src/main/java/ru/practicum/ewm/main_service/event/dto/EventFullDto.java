@@ -10,7 +10,6 @@ import ru.practicum.ewm.main_service.user.dto.UserShortDto;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-
 @Getter
 @Setter
 @Builder

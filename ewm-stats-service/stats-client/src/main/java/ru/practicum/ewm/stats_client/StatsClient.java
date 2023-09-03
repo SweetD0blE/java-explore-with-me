@@ -13,7 +13,6 @@ import ru.practicum.ewm.common_dto.ViewStatDto;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Component
 @Slf4j
 public class StatsClient {

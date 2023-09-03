@@ -1,16 +1,21 @@
 package ru.practicum.ewm.common_dto;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
-@Getter
-@Builder
 @EqualsAndHashCode
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
-public class ViewStatDto {
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@ToString
+public final class ViewStatDto {
 
-    private final String app;
-    private final String uri;
-    private final long hits;
+    String app;
 
+    String uri;
+
+    int hits;
 }

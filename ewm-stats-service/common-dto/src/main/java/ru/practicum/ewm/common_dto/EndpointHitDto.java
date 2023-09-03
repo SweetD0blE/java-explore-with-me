@@ -1,32 +1,30 @@
 package ru.practicum.ewm.common_dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 
-@Data
-@Builder
+@EqualsAndHashCode
+@Getter
+@Setter
 @AllArgsConstructor
-@NoArgsConstructor(force = true)
-public class EndpointHitDto {
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@ToString
+public final class EndpointHitDto {
+
+    Long id;
 
     @NotBlank
-    private final String app;
+    String app;
 
     @NotBlank
-    private final String uri;
+    String uri;
 
     @NotBlank
-    private final String ip;
+    String ip;
 
-    @NotNull
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private final LocalDateTime timestamp;
+    String timestamp;
 
 }

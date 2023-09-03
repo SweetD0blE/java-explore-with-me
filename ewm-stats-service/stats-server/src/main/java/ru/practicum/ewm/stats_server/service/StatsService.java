@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface StatsService {
 
-    List<ViewStatDto> findStatistic(String start, String end, List<String> uris, Boolean unique);
+    List<ViewStatDto> findStatistic(String start, String end, List<String> uris, boolean unique);
 
-    void saveInfoEvent(EndpointHitDto endpointHitDto);
+    EndpointHitDto addHit(EndpointHitDto hitDto);
 
 }

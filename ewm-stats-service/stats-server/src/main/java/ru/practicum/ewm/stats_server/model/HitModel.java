@@ -1,38 +1,36 @@
 package ru.practicum.ewm.stats_server.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
-@Builder
+@Entity
 @Table(name = "stats")
-@NoArgsConstructor
-@AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class HitModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    @Column(name = "stat_id")
+    Long id;
 
-    @NotBlank(message = "app is empty.")
+    @Column(name = "app")
     String app;
 
-    @NotBlank(message = "uri is empty.")
+    @Column(name = "uri")
     String uri;
 
-    @NotNull(message = "ip is empty.")
+    @Column(name = "ip")
     String ip;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "timestamp")
     LocalDateTime timestamp;
 
 }

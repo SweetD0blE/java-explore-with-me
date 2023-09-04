@@ -1,7 +1,6 @@
 package ru.practicum.ewm.main_service.request.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.main_service.event.model.Event;
@@ -26,7 +25,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 @Transactional
 public class RequestServiceImpl implements RequestService {
@@ -36,6 +34,7 @@ public class RequestServiceImpl implements RequestService {
     private final RequestRepository requestRepository;
     public final EventRepository eventRepository;
 
+    @Override
     public Request validateRequest(Long requestId) {
         return requestRepository.findById(requestId).orElseThrow(
                 () -> new ObjectNotFoundException(String.format("Запроса на участие с id = %d не существует", requestId)));

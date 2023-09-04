@@ -15,6 +15,7 @@ import javax.validation.constraints.Size;
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public final class UpdateEventAdminRequest {
+
     @Size(max = 2000, min = 20)
     String annotation;
 

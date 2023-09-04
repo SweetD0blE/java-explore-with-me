@@ -1,6 +1,5 @@
 package ru.practicum.ewm.main_service.compilation.service;
 
-
 import ru.practicum.ewm.main_service.compilation.model.Compilation;
 
 import java.util.List;
